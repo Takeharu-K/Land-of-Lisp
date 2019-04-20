@@ -64,3 +64,14 @@
         (push (list object 'body) *object-locations*)
         `(you pickuped the ,object surely.))
         (t '(you can't get that. fuck you!))))
+
+(defun bag ()
+    (cons 'items- (object-at 'body *objects* *object-locations*)))
+
+(defun test ()
+    (print (look))
+    (print (walk 'north))
+    (print (pickup 'macbookpro))
+    (print (bag)))
+
+(test)
