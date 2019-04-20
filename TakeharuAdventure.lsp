@@ -35,7 +35,12 @@
         (eq (cadr (assoc objects object-locations)) location)))
         (remove-if-not #'at-location-p objects)))
 
+(defun describe-objects (location objects object-locations)
+    (labels ((describe (obj)
+        `(You see a ,obj on the floor.)))
+        (apply #'append (mapcar #'describe (object-at location objects object-locations)))))
+
 (print (describe-location 'oicx *nodes*))
 (print (describe-path '(osu south roadbike)))
 (print (describe-paths 'oicx *edges*))
-(print (object-at 'osu *objects* *object-locations*))
+(print (describe-objects 'osu *objects* *object-locations*))
