@@ -2,7 +2,7 @@
 (defparameter *small* 1)
 
 (defun guess () 
-  (print (ash (+ *big* *small*) -1))
+  (ash (+ *big* *small*) -1)
 )
 
 (defun smaller ()
@@ -15,18 +15,26 @@
   (guess)
 )
 
+(defun done ()
+  (print "Yeah! What a smart monster I am!")
+  (resetWith 0 1000)
+)
+
 (defun resetWith (small big)
   (setf *big* big)
   (setf *small* small)
+  (print "Next game has started!")
+  (print "Imagine your number from 0 to 1000")
+  (guess)
 )
 
 (defun main ()
-  (print '(I guess what number you imagine !))
-  (print '(Imagine one number between 1 to 100))
-  (print '(How to play?))
-  (print '-----------------------)
-  (print '(Type (smaller) or (bigger)))
-  (guess)
+  (print "I guess what number you imagine !")
+  (print "Imagine one number between 1 to 100")
+  (print "-----------------------")
+  (print "How to play")
+  (print "Type (guess)")
+  (print "Type (smaller) or (bigger) or (done)")
 )
 
 (main)
