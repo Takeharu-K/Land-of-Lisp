@@ -24,6 +24,7 @@
 ;現在地location
 (defparameter *location* 'osu)
 
+;describe functions
 (defun describe-location (location nodes)
     (cadr (assoc location nodes)))
 
@@ -43,6 +44,7 @@
         `(you see a ,obj on the floor.)))
         (apply #'append (mapcar #'describe (object-at location objects object-locations)))))
 
+;action functions
 (defun look ()
     (append (describe-location *location* *nodes*)
         (describe-paths *location* *edges*)
@@ -55,3 +57,10 @@
                 (progn (setf *location* (car next))
                         (look))
                 '(you can't go to that direction.))))
+
+(defun pickup (object)
+    (cond ((member object
+                (object-at *location* *objects* *object-locations*))
+        (push (list object 'body) *object-locations*)
+        `(you pickuped the ,object surely.))
+        (t '(you can't get that. fuck you!))))
