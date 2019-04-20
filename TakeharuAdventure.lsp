@@ -8,8 +8,8 @@
 (defparameter *edges* '(
     (oicx (osu south roadbike)
         (nit east train))
-    (osu (north roadbike))
-    (nit (west train))))
+    (osu (oicx north roadbike))
+    (nit (oicx west train))))
 
 ;物体object
 (defparameter *objects* '(
@@ -20,6 +20,9 @@
     (alexa osu)
     (airmax osu)
     (matlab nit)))
+
+;現在地location
+(defparameter *location* 'osu)
 
 (defun describe-location (location nodes)
     (cadr (assoc location nodes)))
@@ -37,10 +40,12 @@
 
 (defun describe-objects (location objects object-locations)
     (labels ((describe (obj)
-        `(You see a ,obj on the floor.)))
+        `(you see a ,obj on the floor.)))
         (apply #'append (mapcar #'describe (object-at location objects object-locations)))))
 
-(print (describe-location 'oicx *nodes*))
-(print (describe-path '(osu south roadbike)))
-(print (describe-paths 'oicx *edges*))
-(print (describe-objects 'osu *objects* *object-locations*))
+(defun look ()
+    (append (describe-location *location* *nodes*)
+        (describe-paths *location* *edges*)
+        (describe-objects *location* *objects* *object-locations*)))
+
+(print (look))
