@@ -49,3 +49,4 @@
         (describe-objects *location* *objects* *object-locations*)))
 
 (print (look))
+(blabalbalabalbalb)
