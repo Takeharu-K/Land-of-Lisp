@@ -1,0 +1,11 @@
+(defun greet-print ()
+    (print "Type your name:")
+    (let ((name (read)))
+        (print "Nice to meet you,")
+        (print name)))
+
+(defun greet-princ ()
+    (princ "Type your name:")
+    (let ((name (read-line)))
+        (princ "Nice to meet you, ")
+        (princ name))) 
