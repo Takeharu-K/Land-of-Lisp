@@ -24,6 +24,9 @@
 ;現在地location
 (defparameter *location* 'osu)
 
+;許可されたコマンド
+(defparameter *ok-commands* '(look walkTo pickup inBag))
+
 ;describe functions
 (defun describe-location (location nodes)
     (cadr (assoc location nodes)))
@@ -50,7 +53,7 @@
         (describe-paths *location* *edges*)
         (describe-objects *location* *objects* *object-locations*)))
 
-(defun walk (direction)
+(defun walkTo (direction)
     (let ((next (find direction 
                 (cdr (assoc *location* *edges*)) :key #'cadr)))
             (if next
@@ -62,16 +65,53 @@
     (cond ((member object
                 (object-at *location* *objects* *object-locations*))
         (push (list object 'body) *object-locations*)
-        `(you pickuped the ,object surely.))
+        `(you pickuped the ,object))
         (t '(you can't get that. fuck you!))))
 
-(defun bag ()
+(defun inBag ()
     (cons 'items- (object-at 'body *objects* *object-locations*)))
+
+;gameのREPL関数
+(defun game-repl ()
+    (let ((cmd (game-read)))
+        (unless (eq (car cmd) 'quit)
+            (game-print (game-eval cmd))
+            (game-repl))))
+
+(defun game-read ()
+    (let ((cmd (read-from-string 
+                (concatenate 'string "(" (read-line) ")"))))
+        (flet ((quote-it (x)
+                    (list 'quote x)))
+            (cons (car cmd) (mapcar #'quote-it (cdr cmd))))))
+
+(defun game-eval (cmd)
+    (if (member (car cmd) *ok-commands*)
+        (eval cmd)
+        '(I dont know that command! fuck you!)))
+
+(defun game-print (lst)
+    (princ (coerce (adjustText (coerce (string-trim "() "
+                                        (prin1-to-string lst))
+                                        'list)
+                                t
+                                nil)
+                    'string))
+            (fresh-line))
+
+(defun adjustText (lst caps lit)
+    (when lst
+        (let ((item (car lst))
+                (rest (cdr lst)))
+            (cond ((eql item #\space) (cons item (adjustText rest caps lit)))
+                    ((member item '(#\! #\? #\.)) (cons item (adjustText rest t lit)))
+                    ((eql item #\") (adjustText rest caps (not lit)))
+                    (lit (cons item (adjustText rest nil nil)))
+                    (caps (cons (char-upcase item) (adjustText rest nil lit)))
+                    (t (cons (char-downcase item) (adjustText rest nil nil)))))))
 
 (defun test ()
     (print (look))
     (print (walk 'north))
     (print (pickup 'macbookpro))
     (print (bag)))
-
-(test)
