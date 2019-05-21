@@ -112,6 +112,9 @@
 
 (defun test ()
     (print (look))
-    (print (walk 'north))
+    (print (walkTo 'north))
     (print (pickup 'macbookpro))
-    (print (bag)))
+    (print (inBag)))
+
+(print '(type look or walkto north or pickup macbookpro or inbag))
+(game-repl)
